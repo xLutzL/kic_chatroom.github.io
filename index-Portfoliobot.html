@@ -1,22 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Assistant</title>
 
-  <!-- Chatroom styles via jsDelivr -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/dist/Chatroom.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/index.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/themes/theme2.css" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #e9ecef; /* grauer Hintergrund */
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .chat-container {
+      width: 420px;
+      height: 650px;
+      max-width: 95vw;
+      max-height: 95vh;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      border-radius: 20px;
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .Chatroom {
+      border: none !important;
+      border-radius: 20px !important;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .Chatroom-header {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important; /* Farbverlauf */
+      color: white !important;
+      padding: 15px 20px !important;
+      font-size: 1.2rem !important;
+      font-weight: 600 !important;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    /* Nachrichten-Design */
+    .Chatroom-messages {
+      background: #f8f9fa !important;
+      padding: 15px !important;
+    }
+
+    .Chatroom-message {
+      border-radius: 15px !important;
+      padding: 10px 15px !important;
+      line-height: 1.4 !important;
+      font-size: 0.95rem !important;
+      max-width: 80% !important;
+    }
+
+    /* Chatbot-Nachricht */
+    .Chatroom-message--bot {
+      background: #ffffff !important;
+      color: #333333 !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+      border-bottom-left-radius: 4px !important;
+    }
+
+    /* Nutzer-Nachricht */
+    .Chatroom-message--user {
+      background: #4facfe !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 5px rgba(79, 172, 254, 0.3) !important;
+      border-bottom-right-radius: 4px !important;
+    }
+
+    /* Design des Eingabefelds */
+    .Chatroom-footer {
+      border-top: 1px solid #eeeeee !important;
+      padding: 10px !important;
+      background: #ffffff !important;
+    }
+
+    .Chatroom-input {
+      border-radius: 20px !important;
+      border: 1px solid #ddd !important;
+      padding: 10px 15px !important;
+      font-size: 0.95rem !important;
+      outline: none !important;
+    }
+
+    .Chatroom-input:focus {
+      border-color: #4facfe !important;
+    }
+  </style>
 </head>
 <body>
   <div class="chat-container"></div>
 
-  <!-- Chatroom script via jsDelivr -->
   <script src="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/dist/Chatroom.js"></script>
 
   <script>
-    // Fail-fast hint if the script didn't load
     if (!window.Chatroom) {
       document.body.insertAdjacentHTML('beforeend',
         '<div style="padding:12px;color:#fff;background:#c00">Could not load Chatroom.js</div>');
@@ -24,11 +113,12 @@
 
     var chatroom = new window.Chatroom({
       host: "https://glorious-goggles-jr5565ggx5vjhp6qr-5005.app.github.dev",
-      title: "Chat with a bot",
+      title: "🤖 Portfoliobot",
       container: document.querySelector(".chat-container"),
-      welcomeMessage: "Nice to meet you.",
-      speechRecognition: "en-US",
-      voiceLang: "en-US"
+      // Hinweis, dass Antworten standardmäßig von Kempten ausgehen
+      welcomeMessage: "Hallo! Was hast du heute vor? (Standort: Kempten)",
+      speechRecognition: "de-DE" // Mikrofoneingabe
+      //voiceLang: "de-DE" // auskommentiert, um automatisches Vorlesen zu deaktivieren
     });
     chatroom.openChat();
   </script>
