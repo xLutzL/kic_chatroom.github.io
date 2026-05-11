@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Chatroom styles via jsDelivr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/dist/Chatroom.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/index.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/themes/theme1.css" />
+</head>
+<body>
+  <div class="chat-container"></div>
+
+  <!-- Chatroom script via jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/dist/Chatroom.js"></script>
+
+  <script>
+    // Fail-fast hint if the script didn't load
+    if (!window.Chatroom) {
+      document.body.insertAdjacentHTML('beforeend',
+        '<div style="padding:12px;color:#fff;background:#c00">Could not load Chatroom.js</div>');
+    }
+
+    var chatroom = new window.Chatroom({
+      host: "https://glorious-goggles-jr5565ggx5vjhp6qr-5005.app.github.dev",
+      title: "Chat with a bot",
+      container: document.querySelector(".chat-container"),
+      welcomeMessage: "Nice to meet you.",
+      speechRecognition: "en-US",
+      voiceLang: "en-US"
+    });
+    chatroom.openChat();
+  </script>
+</body>
+</html>
