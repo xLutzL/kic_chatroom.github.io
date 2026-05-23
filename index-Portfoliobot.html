@@ -11,7 +11,7 @@
   <style>
     body {
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #e9ecef; /* grauer Hintergrund */
+      background: #e9ecef;
       margin: 0;
       height: 100vh;
       display: flex;
@@ -19,89 +19,101 @@
       align-items: center;
     }
 
+    .app-wrapper {
+      position: relative;
+    }
+
+    .clippy-container {
+      position: absolute;
+      left: -110px; 
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none; 
+    }
+
+    #clippy-svg {
+      display: block;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
     .chat-container {
       width: 420px;
-      height: 650px;
       max-width: 95vw;
-      max-height: 95vh;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-      border-radius: 20px;
-      overflow: hidden;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
     }
 
-    .Chatroom {
+    /* --- Chat-Design --- */
+    body .Chatroom {
+      display: flex !important;
+      flex-direction: column !important;
       border: none !important;
       border-radius: 20px !important;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+      overflow: hidden !important;
+      height: auto !important;
     }
 
-    .Chatroom-header {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important; /* Farbverlauf */
-      color: white !important;
-      padding: 15px 20px !important;
+    body .Chatroom-header {
+      position: relative !important;
+      padding: 15px 20px !important; 
       font-size: 1.2rem !important;
       font-weight: 600 !important;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
+      margin: 0 !important;
+      cursor: pointer !important; 
     }
 
-    /* Nachrichten-Design */
-    .Chatroom-messages {
-      background: #f8f9fa !important;
+    body .Chatroom-messages {
+      height: 450px !important; 
       padding: 15px !important;
+      overflow-y: auto !important;
     }
 
-    .Chatroom-message {
+    body .Chatroom-message {
       border-radius: 15px !important;
       padding: 10px 15px !important;
       line-height: 1.4 !important;
       font-size: 0.95rem !important;
-      max-width: 80% !important;
     }
 
-    /* Chatbot-Nachricht */
-    .Chatroom-message--bot {
-      background: #ffffff !important;
-      color: #333333 !important;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
-      border-bottom-left-radius: 4px !important;
-    }
-
-    /* Nutzer-Nachricht */
-    .Chatroom-message--user {
-      background: #4facfe !important;
-      color: #ffffff !important;
-      box-shadow: 0 2px 5px rgba(79, 172, 254, 0.3) !important;
-      border-bottom-right-radius: 4px !important;
-    }
-
-    /* Design des Eingabefelds */
-    .Chatroom-footer {
+    body .Chatroom-footer {
+      position: relative !important;
+      bottom: auto !important;
       border-top: 1px solid #eeeeee !important;
       padding: 10px !important;
-      background: #ffffff !important;
     }
 
-    .Chatroom-input {
+    body .Chatroom-input {
       border-radius: 20px !important;
       border: 1px solid #ddd !important;
       padding: 10px 15px !important;
       font-size: 0.95rem !important;
       outline: none !important;
     }
-
-    .Chatroom-input:focus {
-      border-color: #4facfe !important;
-    }
   </style>
 </head>
 <body>
-  <div class="chat-container"></div>
+
+  <div class="app-wrapper">
+    
+    <div class="clippy-container">
+      <svg id="clippy-svg" width="80" height="100" viewBox="0 0 50 60">
+        <path d="M 35 15 L 35 45 A 10 10 0 0 1 15 45 L 15 20 A 7 7 0 0 1 29 20 L 29 40 A 3 3 0 0 1 23 40 L 23 25" 
+              fill="none" stroke="#4a4e69" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="20" cy="18" rx="7" ry="9" fill="white" stroke="#4a4e69" stroke-width="2"/>
+        <ellipse cx="34" cy="18" rx="7" ry="9" fill="white" stroke="#4a4e69" stroke-width="2"/>
+        <circle id="pupil-left" cx="20" cy="18" r="3" fill="#22223b"/>
+        <circle id="pupil-right" cx="34" cy="18" r="3" fill="#22223b"/>
+      </svg>
+    </div>
+
+    <div class="chat-container"></div>
+    
+  </div>
 
   <script src="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/dist/Chatroom.js"></script>
 
@@ -113,14 +125,38 @@
 
     var chatroom = new window.Chatroom({
       host: "https://glorious-goggles-jr5565ggx5vjhp6qr-5005.app.github.dev",
-      title: "🤖 Portfoliobot",
+      title: "🤖 Portfoliobot", 
       container: document.querySelector(".chat-container"),
-      // Hinweis, dass Antworten standardmäßig von Kempten ausgehen
-      welcomeMessage: "Hallo! Was hast du heute vor? (Standort: Kempten)",
-      speechRecognition: "de-DE" // Mikrofoneingabe
-      //voiceLang: "de-DE" // auskommentiert, um automatisches Vorlesen zu deaktivieren
+      welcomeMessage: "Hallo! Ich kann das Wetter checken, Infos suchen, Witze erzählen oder Tank-Kosten vergleichen. Was hast du vor?",
+      speechRecognition: "de-DE"
     });
     chatroom.openChat();
+
+    // Augen-Animation
+    document.addEventListener('mousemove', function(e) {
+      const pupilL = document.getElementById('pupil-left');
+      const pupilR = document.getElementById('pupil-right');
+      const svg = document.getElementById('clippy-svg');
+      
+      if (!pupilL || !pupilR || !svg) return;
+
+      const rect = svg.getBoundingClientRect();
+      const clippyCenterX = rect.left + (rect.width / 2);
+      const clippyCenterY = rect.top + (rect.height / 2);
+
+      const deltaX = e.clientX - clippyCenterX;
+      const deltaY = e.clientY - clippyCenterY;
+
+      const angle = Math.atan2(deltaY, deltaX);
+      const distance = Math.min(4, Math.hypot(deltaX, deltaY) / 40);
+
+      const xOffset = Math.cos(angle) * distance;
+      const yOffset = Math.sin(angle) * distance;
+
+      pupilL.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+      pupilR.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+    });
+
   </script>
 </body>
 </html>
