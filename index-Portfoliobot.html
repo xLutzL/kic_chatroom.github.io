@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Smart Assistant</title>
+  <title>Portfoliobot</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/dist/Chatroom.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/index.css" />
@@ -19,16 +19,83 @@
       align-items: center;
     }
 
+    /* --- Layout --- */
     .app-wrapper {
       position: relative;
     }
 
+    /* --- Schalter Design --- */
+    .toggle-wrapper {
+      position: absolute;
+      bottom: 30px; /* unter dem Chat */
+      left: 0;       /* linksbündig */
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #000000;
+      font-weight: 600;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #4facfe; /* Farbe wenn aktiviert */
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* --- Clippy --- */
     .clippy-container {
       position: absolute;
       left: -110px; 
       top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none; 
+      transform: translateY(-50%) scale(1);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease; 
+    }
+
+    .clippy-hidden {
+      opacity: 0;
+      transform: translateY(-50%) scale(0.8); 
     }
 
     #clippy-svg {
@@ -46,61 +113,21 @@
       width: 420px;
       max-width: 95vw;
     }
-
-    /* --- Chat-Design --- */
-    body .Chatroom {
-      display: flex !important;
-      flex-direction: column !important;
-      border: none !important;
-      border-radius: 20px !important;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
-      overflow: hidden !important;
-      height: auto !important;
-    }
-
-    body .Chatroom-header {
-      position: relative !important;
-      padding: 15px 20px !important; 
-      font-size: 1.2rem !important;
-      font-weight: 600 !important;
-      margin: 0 !important;
-      cursor: pointer !important; 
-    }
-
-    body .Chatroom-messages {
-      height: 450px !important; 
-      padding: 15px !important;
-      overflow-y: auto !important;
-    }
-
-    body .Chatroom-message {
-      border-radius: 15px !important;
-      padding: 10px 15px !important;
-      line-height: 1.4 !important;
-      font-size: 0.95rem !important;
-    }
-
-    body .Chatroom-footer {
-      position: relative !important;
-      bottom: auto !important;
-      border-top: 1px solid #eeeeee !important;
-      padding: 10px !important;
-    }
-
-    body .Chatroom-input {
-      border-radius: 20px !important;
-      border: 1px solid #ddd !important;
-      padding: 10px 15px !important;
-      font-size: 0.95rem !important;
-      outline: none !important;
-    }
   </style>
 </head>
 <body>
 
   <div class="app-wrapper">
     
-    <div class="clippy-container">
+    <div class="toggle-wrapper">
+      <label class="switch">
+        <input type="checkbox" id="clippy-toggle" checked>
+        <span class="slider"></span>
+      </label>
+      <span>Clippy anzeigen</span>
+    </div>
+
+    <div class="clippy-container" id="clippy-container">
       <svg id="clippy-svg" width="80" height="100" viewBox="0 0 50 60">
         <path d="M 35 15 L 35 45 A 10 10 0 0 1 15 45 L 15 20 A 7 7 0 0 1 29 20 L 29 40 A 3 3 0 0 1 23 40 L 23 25" 
               fill="none" stroke="#4a4e69" stroke-width="4" stroke-linecap="round"/>
@@ -112,7 +139,6 @@
     </div>
 
     <div class="chat-container"></div>
-    
   </div>
 
   <script src="https://cdn.jsdelivr.net/gh/weberi/chatroom@master/dist/Chatroom.js"></script>
@@ -132,8 +158,22 @@
     });
     chatroom.openChat();
 
-    // Augen-Animation
+    // --- Logik für den Clippy-Schalter ---
+    const clippyToggle = document.getElementById('clippy-toggle');
+    const clippyContainer = document.getElementById('clippy-container');
+
+    clippyToggle.addEventListener('change', function() {
+      if (this.checked) {
+        clippyContainer.classList.remove('clippy-hidden');
+      } else {
+        clippyContainer.classList.add('clippy-hidden');
+      }
+    });
+
+    // --- Augen-Animation für Clippy ---
     document.addEventListener('mousemove', function(e) {
+      if (!clippyToggle.checked) return;
+
       const pupilL = document.getElementById('pupil-left');
       const pupilR = document.getElementById('pupil-right');
       const svg = document.getElementById('clippy-svg');
@@ -156,7 +196,6 @@
       pupilL.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
       pupilR.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
     });
-
   </script>
 </body>
 </html>
